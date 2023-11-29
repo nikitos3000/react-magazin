@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import Card from './components/Card';
 import Header from './components/Header';
 import Cart from './components/Cart';
@@ -7,37 +8,46 @@ import Cart from './components/Cart';
 
 function App() {
   const [items, setItems] = React.useState([])
-  const [cartItems, setCardItems] = React.useState([])
+  const [favorites, setFavorites] = React.useState([])
+  const [cartItems, setCartItems] = React.useState([])
   const [searchValue, setSearchValue] = React.useState('')
   const [cartOpened, setCardOpened] = React.useState(false)
 
 React.useEffect(() =>{
-  fetch('https://655e39039f1e1093c59ac065.mockapi.io/items').then((res)=> {
-    return res.json()
-  }).then(json => {
-    setItems(json)
+  axios.get('https://655e39039f1e1093c59ac065.mockapi.io/items').then(res =>{
+    setItems(res.data)
   })
+  axios.get('https://655e39039f1e1093c59ac065.mockapi.io/cart').then(res =>{
+    setCartItems(res.data)
+  })
+  axios.get('')
+
 },[])
-const onDeleteItem = (obj) => {
-  setCardItems(prev => [...prev])
-}
 
 const onAddToCart= (obj)=>{
-if(cartItems.includes(obj)){
-  onDeleteItem()
+  axios.post('https://655e39039f1e1093c59ac065.mockapi.io/cart', obj)
+  setCartItems(prev =>[...prev, obj])
 }
-  setCardItems(prev =>[...prev, obj])
+
+const onRemoveItem = (id) =>{
+  axios.delete(`https://655e39039f1e1093c59ac065.mockapi.io/cart/${id}`)
+  setCartItems(prev => prev.filter(item => item.id !== id))
+}
+
+const onAddToFavorites = (obj)=>{
+  axios.post('https://655e39039f1e1093c59ac065.mockapi.io/cart', obj)
+  setCartItems(prev =>[...prev, obj])
 }
 
 const searchInput = (event) =>{
-  setSearchValue(event.target.value)
+  setFavorites(event.target.value)
 
 }
 
   return (
     <div className="wrap clear">
      
-    {cartOpened && <Cart items={cartItems} onClose={()=> setCardOpened(false)}/>}
+    {cartOpened && <Cart items={cartItems} onClose={()=> setCardOpened(false)} onDelete={onRemoveItem}/>}
 
     <Header
     onClickCart={()=> setCardOpened(true)} />
@@ -47,9 +57,8 @@ const searchInput = (event) =>{
         <h1>{searchValue ? `Поиск по запросу "${searchValue}"` : 'Все товары'}</h1>
       <div className="search d-flex">
         <img  width={30} height={30} src="/img/search.png" alt="" />
-        {searchValue && <button onClick={()=> setSearchValue('')} className="clear cu-p">
-            <img className="remove" width={11} height={11} src="/img/krest.png" alt="clear" />
-          </button>}
+        {searchValue && 
+            <img  onClick={()=> setSearchValue('')} className="clear cu-p remove" width={11} height={11} src="/img/krest.png" alt="clear" />}
         <input onChange={searchInput} value={searchValue} placeholder="Поиск" />
       </div>
       </div>
