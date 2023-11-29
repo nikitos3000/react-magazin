@@ -17,9 +17,9 @@ function Cart({onClose, items = []}){
           </div>
           <div className="mr-20">
             <p className="mb-5">{obj.title}</p>
-            <b>obj.price</b>
+            <b>{obj.price}</b>
           </div>
-          <button className="ml-50">
+            <button className="">
             <img className="remove" width={11} height={11} src="/img/krest.png" alt="zakrit" />
           </button>
         </div>
