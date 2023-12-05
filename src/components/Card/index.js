@@ -1,8 +1,8 @@
 import React from 'react'
 import styles from './Card.module.scss'
-function Card({onClickFavorite, title, imgUrl, price, onClickBuy}) {
+function Card({onClickFavorite, title, imgUrl, price, onClickBuy, id, favorited = false}) {
   const [isAdd, setIsAdd] = React.useState(false)
-  const [isFavorite, setIsFavorite] = React.useState(false)
+  const [isFavorite, setIsFavorite] = React.useState(favorited)
 
   const onClickPlus = () =>{
     onClickBuy({title, imgUrl, price,})
@@ -10,8 +10,10 @@ function Card({onClickFavorite, title, imgUrl, price, onClickBuy}) {
   }
 
   const onClickHeart = () =>{
+    onClickFavorite({title, imgUrl, price})
     setIsFavorite(!isFavorite)
   }
+
 
 
 
@@ -22,6 +24,7 @@ function Card({onClickFavorite, title, imgUrl, price, onClickBuy}) {
     </div>
         <img width={133} height={112} src={imgUrl} alt="tovar" />
         <h5>{title}</h5>
+        <p>{id}</p>
         <div className="d-flex justify-between align-center">
           <div className="d-flex flex-column">
             <span>Цена:</span>

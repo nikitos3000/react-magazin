@@ -12,6 +12,7 @@ function Cart({onClose, onDelete, items = []}){
             {
               items.map((obj) =>
               (
+                
   <div className="cartItem d-flex align-center mb-20">
             <img className="mr-15" width={70} height={70} src={obj.imgUrl} alt="tovar" />
             <div style={{backgroundImage: 'url(/img/tovar.jpg)' }} className="cartItemImg">
